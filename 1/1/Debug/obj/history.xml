@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m4 -mthumb -Wall -ffunction-sections -g -O0 -c -DSTM32F407VG -DSTM32F4XX -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -I..\..\..\..\..\Users\Jakub\Desktop -I..\..\..\..\..\Users\Jakub\Desktop\1\cmsis -I..\..\..\..\..\Users\Jakub\Desktop\1\semihosting -I..\..\..\..\..\Users\Jakub\Desktop\1 -I..\..\..\..\..\Users\Jakub\Desktop\1\cmsis_boot -I..\..\..\..\..\Users\Jakub\Desktop\1\cmsis_lib\include -I..\..\..\..\..\Users\Jakub\Desktop\1\cmsis_lib">
+      <target file="syscalls.o" lastModified="14e07e56699">
+         <source file="..\..\..\syscalls\syscalls.c" lastModified="14d5d00a180"/>
+      </target>
+      <target file="stm32f4xx_gpio.o" lastModified="14e07e56616">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_gpio.c" lastModified="14d5d00f770"/>
+      </target>
+      <target file="stm32f4xx_tim.o" lastModified="14e07e567b8">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_tim.c" lastModified="14db33c8f00"/>
+      </target>
+      <target file="printf.o" lastModified="14e07e565cf">
+         <source file="..\..\..\stdio\printf.c" lastModified="14d5d052d90"/>
+      </target>
+      <target file="system_stm32f4xx.o" lastModified="14e07e5665f">
+         <source file="..\..\..\cmsis_boot\system_stm32f4xx.c" lastModified="14d5d00d830"/>
+      </target>
+      <target file="startup_stm32f4xx.o" lastModified="14e07e564d0">
+         <source file="..\..\..\cmsis_boot\startup\startup_stm32f4xx.c" lastModified="14d5d054cd0"/>
+      </target>
+      <target file="stm32f4xx_usart.o" lastModified="14e07e5649f">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_usart.c" lastModified="14d5d11b0b0"/>
+      </target>
+      <target file="stm32f4xx_exti.o" lastModified="14e07e566d6">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_exti.c" lastModified="14db34b5440"/>
+      </target>
+      <target file="stm32f4xx_syscfg.o" lastModified="14e07e56448">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_syscfg.c" lastModified="14db34bc1a0"/>
+      </target>
+      <target file="main.o" lastModified="14e1123820d">
+         <source file="..\..\..\main.c" lastModified="14e11237f75"/>
+      </target>
+      <target file="sh_cmd.o" lastModified="14e07e56622">
+         <source file="..\..\..\semihosting\sh_cmd.s" lastModified="14d5d00b8f0"/>
+      </target>
+      <target file="semihosting.o" lastModified="14e07e563ff">
+         <source file="..\..\..\semihosting\semihosting.c" lastModified="14d5d00b8f0"/>
+      </target>
+      <target file="stm32f4xx_rcc.o" lastModified="14e07e56581">
+         <source file="..\..\..\cmsis_lib\source\stm32f4xx_rcc.c" lastModified="14d5d00f770"/>
+      </target>
+      <target file="misc.o" lastModified="14e07e56713">
+         <source file="..\..\..\cmsis_lib\source\misc.c" lastModified="14db34ba260"/>
+      </target>
+   </processor>
+</history>
