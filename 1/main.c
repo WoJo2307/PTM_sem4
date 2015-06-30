@@ -8,6 +8,10 @@
 
 int a=0;
 int i2=0;
+int f=0;
+int moc1=420;
+int moc2=420;
+int akt_V=0;
 
 GPIO_InitTypeDef GPIO_InitStructure;
 void intic(){
@@ -66,11 +70,11 @@ void intic(){
 		int i=0;
 	// czekaj na odebranie danych
 	while (USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == RESET) {
-		i++;
-		if(i>400000)
-		{
-			return 5;
-		}
+//		i++;
+//		if(i>400000)
+//		{
+//			return 5;
+//		}
 	}
 	return USART_ReceiveData(USART3);
 
@@ -91,48 +95,193 @@ void intic(){
 	}
 
 	void przod(){
-		GPIO_SetBits(GPIOA, GPIO_Pin_4 | GPIO_Pin_7 | GPIO_Pin_3| GPIO_Pin_2 );
+		GPIO_SetBits(GPIOA, GPIO_Pin_4 | GPIO_Pin_7/* | GPIO_Pin_3| GPIO_Pin_2*/ );
 		GPIO_ResetBits(GPIOA, GPIO_Pin_5 | GPIO_Pin_6);
 		//wlaczone + 1. silnika i - 2. --oraz en'y obu silników
 	}
 
 	void tyl(){
-		GPIO_SetBits(GPIOA, GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_2 | GPIO_Pin_3);
+		GPIO_SetBits(GPIOA, GPIO_Pin_5 | GPIO_Pin_6 );
 		GPIO_ResetBits(GPIOA, GPIO_Pin_4 | GPIO_Pin_7);
 		//wlaczone - 1. silnika i + 2. --oraz en'y obu silników
 	}
 
 	void stop(){
-		GPIO_ResetBits(GPIOA, GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_7);
+		GPIO_ResetBits(GPIOA, GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7);
 		//wszystko wylaczone
 	}
+	void InitializeTimer()
+	{
+	    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
-	void speedA(){
-		//pwm
+	    TIM_TimeBaseInitTypeDef timerInitStructure;
+
+	    timerInitStructure.TIM_Prescaler = 200;
+	    timerInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	    timerInitStructure.TIM_Period = 4200;
+	    timerInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+	    timerInitStructure.TIM_RepetitionCounter = 0;
+	    TIM_TimeBaseInit(TIM2, &timerInitStructure);
+	    TIM_Cmd(TIM2, ENABLE);
 	}
+	void InitializePWMChannel()
+	{
+	    TIM_OCInitTypeDef outputChannelInit;
+	    outputChannelInit.TIM_OCMode = TIM_OCMode_PWM1;
+	    outputChannelInit.TIM_Pulse = 0;
+	    outputChannelInit.TIM_OutputState = TIM_OutputState_Enable;
+	    outputChannelInit.TIM_OCPolarity = TIM_OCPolarity_High;
 
-	void speedB(){
-		//pwm
+	    TIM_OC4Init(TIM2, &outputChannelInit);
+	    TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);
+
+	}
+	void InitializePWMChannel2()
+	{
+	    TIM_OCInitTypeDef outputChannelInit = {0,};
+	    outputChannelInit.TIM_OCMode = TIM_OCMode_PWM1;
+	    outputChannelInit.TIM_Pulse = 0;
+	    outputChannelInit.TIM_OutputState = TIM_OutputState_Enable;
+	    outputChannelInit.TIM_OCPolarity = TIM_OCPolarity_High;
+
+	    TIM_OC3Init(TIM2, &outputChannelInit);
+	    TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);
+
+
+	}
+	void InitializeLEDs()
+	{
+	    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+
+	    GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM2);
+	    GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_TIM2);
+
+	    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3| GPIO_Pin_2;
+	    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	    GPIO_Init(GPIOA, &GPIO_InitStructure);
+	}
+	void inir(){
+			InitializeTimer();
+			InitializePWMChannel();
+			InitializePWMChannel2();
+			InitializeLEDs();
+
+	}
+	void f_Z(int b){
+		if(b==11){
+			moc1=0;
+			f_V(akt_V);
+		}
+		else if(b==12){
+			moc1=84;
+			f_V(akt_V);
+		}
+		else if(b==13){
+			moc1=168;
+			f_V(akt_V);
+		}
+		else if(b==14){
+			moc1=252;
+			f_V(akt_V);
+		}
+		else if(b==15){
+			moc1=336;
+			f_V(akt_V);
+		}
+		else if(b==16){
+			moc1=moc2=420;
+			f_V(akt_V);
+		}
+		else if(b==17){
+			moc2=336;
+			f_V(akt_V);
+		}
+		else if(b==18){
+			moc2=252;
+			f_V(akt_V);
+		}
+		else if(b==19){
+			moc2=168;
+			f_V(akt_V);
+		}
+		else if(b==20){
+			moc2=84;
+			f_V(akt_V);
+		}
+		else if(b==21){
+			moc2=0;
+			f_V(akt_V);
+		}
+	}
+	void f_V(int b){
+		akt_V=b;
+		if(b==10){
+			TIM2->CCR4 = moc1*1;
+			TIM2->CCR3 = moc2*1;
+		}
+		else if(b==22){
+			TIM2->CCR4 = moc1*2;
+			TIM2->CCR3 = moc2*2;
+		}
+		else if(b==30){
+			TIM2->CCR4 = moc1*3;
+			TIM2->CCR3 = moc2*3;
+		}
+		else if(b==40){
+			TIM2->CCR4 = moc1*4;
+			TIM2->CCR3 = moc2*4;
+		}
+		else if(b==50){
+			TIM2->CCR4 = moc1*5;
+			TIM2->CCR3 = moc2*5;
+		}
+		else if(b==60){
+			TIM2->CCR4 = moc1*6;
+			TIM2->CCR3 = moc2*6;
+		}
+		else if(b==70){
+			TIM2->CCR4 = moc1*7;
+			TIM2->CCR3 = moc2*7;
+		}
+		else if(b==80){
+			TIM2->CCR4 = moc1*8;
+			TIM2->CCR3 = moc2*8;
+		}
+		else if(b==90){
+			TIM2->CCR4 = moc1*9;
+			TIM2->CCR3 = moc2*9;
+		}
+		else if(b==100){
+			TIM2->CCR4 = moc1*10;
+			TIM2->CCR3 = moc2*10;
+		}
 	}
 int main(void) {
+
+
+	inir();
 	intic();
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_14 | GPIO_Pin_13
-			| GPIO_Pin_12;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOD, &GPIO_InitStructure);
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_14 | GPIO_Pin_13
+				| GPIO_Pin_12;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+		GPIO_Init(GPIOD, &GPIO_InitStructure);
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_2 | GPIO_Pin_3;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 /*| GPIO_Pin_2 | GPIO_Pin_3*/;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_Init(GPIOA, &GPIO_InitStructure);
+
 
 	stop();
 	int a=0;
@@ -140,9 +289,10 @@ int main(void) {
 	while (1) {
 		static int count = 0;
 		static int i;
-
+//			TIM2->CCR4 = 4200;
+//			TIM2->CCR3 = 4200;
 		//for (i = 0; i < 10000000; ++i);
-		printf("%d\r\n", ++count);
+		//printf("%d\r\n", ++count);
 		do{
 		 b=usartGetChar();
 		 printf("%d\n", b);
@@ -170,6 +320,15 @@ int main(void) {
 		 			 stop();
 		 			GPIO_ResetBits(GPIOD, GPIO_Pin_14|GPIO_Pin_13|GPIO_Pin_12|GPIO_Pin_15);
 		}
+		else if(b>10&&b<22){
+			f_Z(b);
+		}
+		else{
+			f_V(b);
+		}
+
+
+
 		}while(USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == RESET);
 
 	}

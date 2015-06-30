@@ -79,12 +79,12 @@
       </source>
       <source file="..\..\..\cmsis_boot\startup\startup_stm32f4xx.c" lastModified="14d5d054cd0">
       </source>
-      <source file="..\..\..\cmsis_lib\source\stm32f4xx_exti.c" lastModified="14db34b5440">
-         <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
-      </source>
       <source file="..\..\..\cmsis_lib\source\stm32f4xx_gpio.c" lastModified="14d5d00f770">
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_gpio.h"/>
          <include file="..\..\..\cmsis_lib\include\stm32f4xx_rcc.h"/>
+      </source>
+      <source file="..\..\..\cmsis_lib\source\stm32f4xx_exti.c" lastModified="14db34b5440">
+         <include file="..\..\..\cmsis_lib\include\stm32f4xx_exti.h"/>
       </source>
       <source file="..\..\..\cmsis\core_cm4_simd.h" lastModified="14d5d00cc78">
       </source>
